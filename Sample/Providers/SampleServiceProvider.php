@@ -6,6 +6,7 @@ namespace Modules\Sample\Providers;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use Modules\Sample\Listeners\LogEntityActivity;
 use Modules\Sample\Listeners\LogFileActivity;
 use Modules\Sample\Listeners\LogSettingChange;
 
@@ -35,5 +36,14 @@ class SampleServiceProvider extends ServiceProvider
         // (dipicu dari SettingService::set)
         // ============================================================
         Event::listen(\Spine\Events\SettingUpdated::class, LogSettingChange::class);
+
+        // ============================================================
+        // CONTOH HOOK #3 — event lifecycle generic (HasLifecycleHooks):
+        // EntityCreated/EntityUpdated/EntityDeleted dengan entityType + changes.
+        // Satu listener untuk SEMUA entity (bukan 1 hook per entity seperti legacy).
+        // ============================================================
+        Event::listen(\Spine\Events\EntityCreated::class, LogEntityActivity::class . '@created');
+        Event::listen(\Spine\Events\EntityUpdated::class, LogEntityActivity::class . '@updated');
+        Event::listen(\Spine\Events\EntityDeleted::class, LogEntityActivity::class . '@deleted');
     }
 }

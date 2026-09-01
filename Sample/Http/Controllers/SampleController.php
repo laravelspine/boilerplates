@@ -58,12 +58,9 @@ class SampleController extends Controller
 
         $item = SampleItem::create($validated);
 
-        $this->activityLog->log(
-            "Sample item created: {$item->name}",
-            $item,
-            $request->user(),
-            ['event' => 'created', 'name' => $item->name],
-        );
+        // Activity log OTOMATIS via event EntityCreated (HasLifecycleHooks)
+        // -> listener LogEntityActivity di SampleServiceProvider.
+        // Tidak perlu log manual di sini.
 
         Log::info('[Sample] item created', ['id' => $item->id, 'name' => $item->name]);
 
@@ -96,12 +93,8 @@ class SampleController extends Controller
 
         $item->update($validated);
 
-        $this->activityLog->log(
-            "Sample item updated: {$item->name}",
-            $item,
-            $request->user(),
-            ['event' => 'updated', 'name' => $item->name],
-        );
+        // Activity log OTOMATIS via event EntityUpdated (HasLifecycleHooks)
+        // -> listener LogEntityActivity (changes berisi diff old->new).
 
         Log::info('[Sample] item updated', ['id' => $item->id, 'name' => $item->name]);
 
@@ -174,15 +167,8 @@ class SampleController extends Controller
             return response()->json(['message' => 'Item not found'], 404);
         }
 
-        $this->activityLog->log(
-            "Sample item deleted: {$item->name}",
-            null,
-            $request->user(),
-            ['event' => 'deleted', 'id' => $id, 'name' => $item->name],
-            null,
-            SampleItem::class,
-        );
-
+        // Activity log OTOMATIS via event EntityDeleted (HasLifecycleHooks)
+        // -> listener LogEntityActivity.
         $item->delete();
 
         return response()->json(['message' => 'Item deleted']);

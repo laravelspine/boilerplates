@@ -30,7 +30,8 @@ class SampleController extends Controller
      */
     public function index(): JsonResponse
     {
-        return response()->json(SampleItem::orderByDesc('id')->get());
+        // Kontrak API Spine: bungkus {data: [...]} — konsisten dengan core (ApiResponse::list).
+        return response()->json(['data' => SampleItem::orderByDesc('id')->get()]);
     }
 
     /**

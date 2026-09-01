@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Sample\Listeners;
 
+use Modules\Sample\Models\SampleItem;
 use Spine\Events\EntityCreated;
 use Spine\Events\EntityDeleted;
 use Spine\Events\EntityUpdated;
@@ -12,8 +13,9 @@ use Spine\Services\ActivityLogService;
 /**
  * CONTOH HOOK #3 — event lifecycle generic Spine (HasLifecycleHooks).
  *
- * Satu listener menangani created/updated/deleted untuk SEMUA entity — bukan
- * satu hook per entity seperti legacy (after_contract_added, ...).
+ * Satu listener menangani created/updated/deleted — tapi di-scope ke entity
+ * milik modul ini (SampleItem). Modul lain yang listen event sama (mis.
+ * SampleTasks::LogTaskActivity) menangani entity-nya sendiri — tidak dobel.
  * entityType + changes (diff old→new) tersedia di event.
  */
 class LogEntityActivity
@@ -24,6 +26,10 @@ class LogEntityActivity
 
     public function created(EntityCreated $event): void
     {
+        if (! $event->entity instanceof SampleItem) {
+            return;
+        }
+
         $entity = $event->entity;
 
         $this->activityLog->log(
@@ -36,6 +42,10 @@ class LogEntityActivity
 
     public function updated(EntityUpdated $event): void
     {
+        if (! $event->entity instanceof SampleItem) {
+            return;
+        }
+
         $entity = $event->entity;
 
         $this->activityLog->log(
@@ -48,6 +58,10 @@ class LogEntityActivity
 
     public function deleted(EntityDeleted $event): void
     {
+        if (! $event->entity instanceof SampleItem) {
+            return;
+        }
+
         $this->activityLog->log(
             "{$event->entityType} deleted: " . $this->label($event->entity),
             null,

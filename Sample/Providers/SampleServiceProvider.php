@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Modules\Sample\Listeners\LogEntityActivity;
 use Modules\Sample\Listeners\LogFileActivity;
 use Modules\Sample\Listeners\LogSettingChange;
+use Modules\Sample\Listeners\SyncSampleStatusFromTasks;
 
 class SampleServiceProvider extends ServiceProvider
 {
@@ -45,5 +46,18 @@ class SampleServiceProvider extends ServiceProvider
         Event::listen(\Spine\Events\EntityCreated::class, LogEntityActivity::class . '@created');
         Event::listen(\Spine\Events\EntityUpdated::class, LogEntityActivity::class . '@updated');
         Event::listen(\Spine\Events\EntityDeleted::class, LogEntityActivity::class . '@deleted');
+
+        // ============================================================
+        // CONTOH HOOK #4 — LINTAS MODUL: parent mengikuti status child.
+        // Listen event SampleTask (modul SampleTasks) dari dalam modul Sample:
+        // semua child done -> parent SampleItem ikut done.
+        // Guard class_exists: Sample tetap jalan tanpa SampleTasks ter-install.
+        // ============================================================
+        if (class_exists(\Modules\SampleTasks\Models\SampleTask::class)) {
+            Event::listen(
+                [\Spine\Events\EntityCreated::class, \Spine\Events\EntityUpdated::class, \Spine\Events\EntityDeleted::class],
+                SyncSampleStatusFromTasks::class . '@sync'
+            );
+        }
     }
 }

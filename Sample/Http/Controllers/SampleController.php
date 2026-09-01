@@ -54,7 +54,7 @@ class SampleController extends Controller
             'description' => ['nullable', 'string'],
             'quantity'    => ['nullable', 'integer', 'min:0'],
             'price'       => ['nullable', 'numeric', 'min:0'],
-            'status'      => ['sometimes', 'string', 'in:draft,active,archived'],
+            'status'      => ['sometimes', 'string', 'in:draft,in_progress,done'],
         ]);
 
         $item = SampleItem::create($validated);
@@ -90,7 +90,7 @@ class SampleController extends Controller
             'description' => ['nullable', 'string'],
             'quantity'    => ['nullable', 'integer', 'min:0'],
             'price'       => ['nullable', 'numeric', 'min:0'],
-            'status'      => ['sometimes', 'string', 'in:draft,active,archived'],
+            'status'      => ['sometimes', 'string', 'in:draft,in_progress,done'],
         ]);
 
         $item->update($validated);

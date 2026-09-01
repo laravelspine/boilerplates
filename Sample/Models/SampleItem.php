@@ -15,6 +15,20 @@ class SampleItem extends Model
     // Auto-generate ULID (bukan UUID) di kolom 'ulid' saat create — bawaan Laravel
     use HasUlids;
 
+    /**
+     * Status — source of truth. Konsisten dengan SampleTask (child):
+     * parent mengikuti child (semua done -> parent done).
+     */
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_IN_PROGRESS = 'in_progress';
+    public const STATUS_DONE = 'done';
+
+    public const STATUSES = [
+        self::STATUS_DRAFT,
+        self::STATUS_IN_PROGRESS,
+        self::STATUS_DONE,
+    ];
+
     protected $fillable = ['name', 'description', 'quantity', 'price', 'ulid', 'status'];
 
     protected $casts = [

@@ -56,6 +56,45 @@ class SampleController extends Controller
     }
 
     /**
+     * Detail satu item — konten tab 'overview'.
+     *
+     * @authenticated
+     *
+     * @urlParam id integer required Item ID. Example: 1
+     */
+    public function show(int $id): JsonResponse
+    {
+        $item = SampleItem::find($id);
+
+        if (! $item) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        return response()->json($item);
+    }
+
+    /**
+     * Activity log untuk satu item — konten tab 'activity'.
+     *
+     * @authenticated
+     *
+     * @urlParam id integer required Item ID. Example: 1
+     */
+    public function activityLogs(int $id): JsonResponse
+    {
+        if (! SampleItem::find($id)) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        // CONTOH: data statis (di produksi: ActivityLogService + polymorphic subject)
+        return response()->json([
+            'data' => [
+                ['event' => 'item.viewed', 'item_id' => $id, 'at' => now()->toIso8601String()],
+            ],
+        ]);
+    }
+
+    /**
      * Hapus item contoh.
      *
      * @authenticated

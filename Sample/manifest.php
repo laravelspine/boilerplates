@@ -34,6 +34,23 @@ return [
         ],
     ],
 
+    'detail_tabs' => [
+        [
+            'slug'     => 'overview',
+            'label'    => 'Overview',
+            'icon'     => '👁️',
+            'api'      => '/api/v1/sample/{id}',
+            'position' => 10,
+        ],
+        [
+            'slug'     => 'activity',
+            'label'    => 'Activity',
+            'icon'     => '🕐',
+            'api'      => '/api/v1/sample/{id}/activity-logs',
+            'position' => 20,
+        ],
+    ],
+
     'settings' => [
         [
             'slug'     => 'sample',

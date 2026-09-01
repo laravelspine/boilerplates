@@ -33,4 +33,33 @@ return [
             'api'   => '/api/v1/sample',
         ],
     ],
+
+    'settings' => [
+        [
+            'slug'     => 'sample',
+            'label'    => 'Sample',
+            'icon'     => '📦',
+            'position' => 51,
+            'fields'   => [
+                [
+                    'key'     => 'sample_prefix',
+                    'label'   => 'Prefix',
+                    'type'    => 'text',
+                    'default' => 'SMP',
+                ],
+                [
+                    'key'     => 'sample_max_items',
+                    'label'   => 'Max items',
+                    'type'    => 'number',
+                    'default' => '100',
+                ],
+                [
+                    'key'     => 'sample_notify',
+                    'label'   => 'Notify on new item',
+                    'type'    => 'checkbox',
+                    'default' => '1',
+                ],
+            ],
+        ],
+    ],
 ];

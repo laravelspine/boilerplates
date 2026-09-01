@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SampleItem extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'description', 'quantity', 'price'];
 
     protected $casts = [
-        'id' => 'integer',
+        'id'       => 'integer',
+        'quantity' => 'integer',
+        'price'    => 'decimal:2',
     ];
 }

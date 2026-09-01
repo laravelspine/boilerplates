@@ -45,7 +45,10 @@ class SampleController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:190'],
+            'name'        => ['required', 'string', 'max:190'],
+            'description' => ['nullable', 'string'],
+            'quantity'    => ['nullable', 'integer', 'min:0'],
+            'price'       => ['nullable', 'numeric', 'min:0'],
         ]);
 
         $item = SampleItem::create($validated);
@@ -53,6 +56,37 @@ class SampleController extends Controller
         Log::info('[Sample] item created', ['id' => $item->id, 'name' => $item->name]);
 
         return response()->json($item, 201);
+    }
+
+    /**
+     * Update item contoh.
+     *
+     * @authenticated
+     *
+     * @urlParam id integer required Item ID. Example: 1
+     *
+     * @bodyParam name string required Nama item. Example: Item A
+     */
+    public function update(int $id, Request $request): JsonResponse
+    {
+        $item = SampleItem::find($id);
+
+        if (! $item) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        $validated = $request->validate([
+            'name'        => ['sometimes', 'string', 'max:190'],
+            'description' => ['nullable', 'string'],
+            'quantity'    => ['nullable', 'integer', 'min:0'],
+            'price'       => ['nullable', 'numeric', 'min:0'],
+        ]);
+
+        $item->update($validated);
+
+        Log::info('[Sample] item updated', ['id' => $item->id, 'name' => $item->name]);
+
+        return response()->json($item);
     }
 
     /**

@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sample_items', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id'); // BIGINT unsigned — alias eksplisit dari $table->id()
             $table->string('name');
             $table->timestamps();
         });
